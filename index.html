@@ -37,6 +37,8 @@
         }
     </style>
 </head>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
 <body>
     <div class="scorecards">
         <h2>Game 1</h2>
@@ -112,6 +114,55 @@
             </tbody>
         </table>
     </div>
+    <script>
+        // Firebase configuration
+        var firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+    
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var database = firebase.database();
+    
+        // Save data to Firebase
+        function saveData(player, hole, score) {
+            database.ref('scorecards/' + player + '/' + hole).set(score);
+        }
+    
+        // Retrieve and populate data from Firebase
+        database.ref('scorecards/').on('value', function(snapshot) {
+            snapshot.forEach(function(playerSnapshot) {
+                playerSnapshot.forEach(function(holeSnapshot) {
+                    var player = playerSnapshot.key;
+                    var hole = holeSnapshot.key;
+                    var score = holeSnapshot.val();
+                    
+                    // populate your input fields accordingly
+                    var inputElement = document.querySelector('.player-row[data-player="' + player + '"] .hole-score:nth-child(' + (parseInt(hole) + 1) + ')');
+                    if (inputElement) {
+                        inputElement.value = score;
+                    }
+                });
+            });
+        });
+    
+        // Attach event listeners to your inputs
+        var scoreInputs = document.querySelectorAll(".hole-score");
+        scoreInputs.forEach(function(input, index) {
+            input.addEventListener("change", function() {
+                var player = input.closest('.player-row').getAttribute('data-player');
+                var hole = index + 1;
+                var score = input.value;
+                saveData(player, hole, score);
+            });
+        });
+    </script>
 </body>
 </html>
 
