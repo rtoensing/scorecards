@@ -114,55 +114,30 @@
             </tbody>
         </table>
     </div>
-    <script>
-        // Firebase configuration
-        var firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-    
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        var database = firebase.database();
-    
-        // Save data to Firebase
-        function saveData(player, hole, score) {
-            database.ref('scorecards/' + player + '/' + hole).set(score);
-        }
-    
-        // Retrieve and populate data from Firebase
-        database.ref('scorecards/').on('value', function(snapshot) {
-            snapshot.forEach(function(playerSnapshot) {
-                playerSnapshot.forEach(function(holeSnapshot) {
-                    var player = playerSnapshot.key;
-                    var hole = holeSnapshot.key;
-                    var score = holeSnapshot.val();
-                    
-                    // populate your input fields accordingly
-                    var inputElement = document.querySelector('.player-row[data-player="' + player + '"] .hole-score:nth-child(' + (parseInt(hole) + 1) + ')');
-                    if (inputElement) {
-                        inputElement.value = score;
-                    }
-                });
-            });
-        });
-    
-        // Attach event listeners to your inputs
-        var scoreInputs = document.querySelectorAll(".hole-score");
-        scoreInputs.forEach(function(input, index) {
-            input.addEventListener("change", function() {
-                var player = input.closest('.player-row').getAttribute('data-player');
-                var hole = index + 1;
-                var score = input.value;
-                saveData(player, hole, score);
-            });
-        });
-    </script>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyA5nX2wPATr3lA0HIpQSatKZZjWcAUwJCs",
+    authDomain: "scorecards-60dfb.firebaseapp.com",
+    databaseURL: "https://scorecards-60dfb-default-rtdb.firebaseio.com",
+    projectId: "scorecards-60dfb",
+    storageBucket: "scorecards-60dfb.appspot.com",
+    messagingSenderId: "96278005980",
+    appId: "1:96278005980:web:480927100db7bc75df0c19",
+    measurementId: "G-G49H8JE45J"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 </body>
 </html>
 
